@@ -31,9 +31,14 @@ public class BPMNLayoutGenerator {
         SVG
     }
 
-    protected final BpmnInOut bpmnInOut = defaultBpmnInOut();
+    protected static final BpmnInOut bpmnInOut = defaultBpmnInOut();
 
 
+    public static String layout(String bpmn, ExportType exportType) {
+        TDefinitions tDefinitions = bpmnInOut.readFromBpmn(bpmn);
+        LayoutSortedDiagram layout = layout(tDefinitions);
+        return export(layout, exportType);
+    }
     /*
        Public methods
      */
@@ -55,15 +60,15 @@ public class BPMNLayoutGenerator {
        BPMN --> Diagram
      */
 
-    private LayoutSortedDiagram layout(TDefinitions definitions) {
-        log.info("Converting BPMN into internal model");
+    private static  LayoutSortedDiagram layout(TDefinitions definitions) {
+        log.debug("Converting BPMN into internal model");
         Diagram diagram = new BpmnToAlgoModelConverter().toAlgoModel(definitions);
-        log.info("Conversion done");
+        log.debug("Conversion done");
 
-        log.info("Sorting and generating Layout");
+        log.debug("Sorting and generating Layout");
         Diagram sortedDiagram = new ShapeSorter().sort(diagram);
         Grid grid = new ShapeLayouter().layout(sortedDiagram);
-        log.info("Sort and Layout done");
+        log.debug("Sort and Layout done");
 
         return new LayoutSortedDiagram(definitions, grid, sortedDiagram);
     }
@@ -75,24 +80,24 @@ public class BPMNLayoutGenerator {
        Diagram --> Exported format
      */
 
-    private String exportToAscii(LayoutSortedDiagram diagram) {
-        log.info("Exporting to ASCII file");
+    private static String exportToAscii(LayoutSortedDiagram diagram) {
+        log.debug("Exporting to ASCII file");
         return new ASCIIExporter().export(diagram.getGrid());
     }
 
-    protected String exportToBpmn(LayoutSortedDiagram diagram) {
-        log.info("Exporting to BPMN");
+    protected static String exportToBpmn(LayoutSortedDiagram diagram) {
+        log.debug("Exporting to BPMN");
         TDefinitions newDefinitions = defaultBpmnExporter().export(diagram.originalDefinitions, diagram.grid, diagram.diagram);
         return bpmnInOut.writeToBpmn(newDefinitions);
     }
 
-    private String exportToSvg(LayoutSortedDiagram diagram) {
-        log.info("Exporting to SVG");
+    private static String exportToSvg(LayoutSortedDiagram diagram) {
+        log.debug("Exporting to SVG");
         return new SVGExporter().export(diagram.getGrid(), diagram.getDiagram());
     }
 
 
-    private String export(LayoutSortedDiagram layout, ExportType exportType) {
+    private static String export(LayoutSortedDiagram layout, ExportType exportType) {
         switch (exportType) {
             case ASCII:
                 return exportToAscii(layout);
