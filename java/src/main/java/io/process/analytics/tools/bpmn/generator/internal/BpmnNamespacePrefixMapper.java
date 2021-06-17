@@ -26,7 +26,8 @@ public class BpmnNamespacePrefixMapper extends NamespacePrefixMapper {
     private static final Map<String, String> namespaces = new HashMap<>();
     static {
         namespaces.put("http://www.omg.org/spec/BPMN/20100524/DI", "bpmndi");
-        namespaces.put("http://www.omg.org/spec/BPMN/20100524/MODEL", "semantic");
+        // 去除 semantic 前缀
+        namespaces.put("http://www.omg.org/spec/BPMN/20100524/MODEL", "");
         namespaces.put("http://www.omg.org/spec/DD/20100524/DC", "dc");
         namespaces.put("http://www.omg.org/spec/DD/20100524/DI", "di");
     }

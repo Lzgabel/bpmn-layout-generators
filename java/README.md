@@ -9,6 +9,13 @@
 The project bundles a Maven Wrapper, so just run
 ``` bash
 ./mvnw package
+
+编辑 target/generated-sources/jaxb/io/process/analytics/tools/bpmn/generator/internal/generated/model/TDefinitions.java 文件
+添加如下属性(用于 Camunda Modeler 标识这个 Camunda Cloud 文件)
+
+@XmlAttribute(name = "xmlns:zeebe", required = true)
+@XmlSchemaType(name = "anyURI")
+protected String zeebe = "http://camunda.org/schema/zeebe/1.0";
 ```
 
 ## Usage
