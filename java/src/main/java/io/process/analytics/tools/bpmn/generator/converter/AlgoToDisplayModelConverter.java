@@ -54,7 +54,10 @@ public class AlgoToDisplayModelConverter {
             if (shapeType == ShapeType.EVENT || shapeType == ShapeType.GATEWAY) {
                 int nodeDimension = Math.min(nodeWidth, nodeHeight);
                 if (shapeType == ShapeType.EVENT) {
-                    nodeDimension /= 2;
+                    nodeDimension /= 2.2;
+                }
+                if (shapeType == ShapeType.GATEWAY) {
+                    nodeDimension /= 1.58;
                 }
                 nodeWidth = nodeDimension;
                 nodeHeight = nodeDimension;
