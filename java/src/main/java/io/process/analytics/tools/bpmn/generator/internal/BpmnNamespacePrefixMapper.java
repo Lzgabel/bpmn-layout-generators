@@ -28,6 +28,7 @@ public class BpmnNamespacePrefixMapper extends NamespacePrefixMapper {
         namespaces.put("http://www.omg.org/spec/BPMN/20100524/DI", "bpmndi");
         // 去除 semantic 前缀
         namespaces.put("http://www.omg.org/spec/BPMN/20100524/MODEL", "");
+        namespaces.put("http://camunda.org/schema/zeebe/1.0", "zeebe");
         namespaces.put("http://www.omg.org/spec/DD/20100524/DC", "dc");
         namespaces.put("http://www.omg.org/spec/DD/20100524/DI", "di");
     }
