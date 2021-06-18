@@ -24,7 +24,6 @@ import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.util.concurrent.Callable;
 
-import io.process.analytics.tools.bpmn.generator.BPMNLayoutGenerator.ExportType;
 import io.process.analytics.tools.bpmn.generator.internal.FileUtils;
 import lombok.extern.log4j.Log4j2;
 import picocli.CommandLine;
@@ -223,8 +222,8 @@ public class App implements Callable<Integer> {
 //        int exitCode = runApp(args);
 //        System.exit(exitCode);
 
-        BPMNLayoutGenerator bpmnLayoutGenerator = new BPMNLayoutGenerator();
-        String output = bpmnLayoutGenerator.generateLayoutFromBPMNSemantic(s, exportType("BPMN"));
+        BpmnAutoLayout bpmnAutoLayout = new BpmnAutoLayout();
+        String output = bpmnAutoLayout.generateLayoutFromBPMNSemantic(s, BpmnAutoLayout.ExportType.BPMN);
         System.out.println(output);
     }
 
@@ -239,14 +238,14 @@ public class App implements Callable<Integer> {
     @Override
     public Integer call() {
         try {
-            BPMNLayoutGenerator bpmnLayoutGenerator = new BPMNLayoutGenerator();
+            BpmnAutoLayout bpmnLayoutGenerator = new BpmnAutoLayout();
             String output;
             switch (inputType) {
                 case "BPMN":
                     if (inputFiles.length != 1) {
                         System.err.println("Expected only one input file to import from BPMN format, got: " + inputType.length());
                     }
-                    output = bpmnLayoutGenerator.generateLayoutFromBPMNSemantic(FileUtils.fileContent(inputFiles[0]), exportType(outputType));
+                    output = bpmnLayoutGenerator.generateLayoutFromBPMNSemantic(FileUtils.fileContent(inputFiles[0]), BpmnAutoLayout.ExportType.BPMN);
                     break;
                 case "CSV":
                     if (inputFiles.length != 2) {
@@ -276,13 +275,13 @@ public class App implements Callable<Integer> {
     }
 
 
-    private static ExportType exportType(String arg) {
+    private static BpmnAutoLayout.ExportType exportType(String arg) {
         try {
-            return ExportType.valueOf(arg.toUpperCase());
+            return BpmnAutoLayout.ExportType.valueOf(arg.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException(
                     format("Invalid export type: %s. Must be one of [%s]", arg,
-                            stream(ExportType.values())
+                            stream(BpmnAutoLayout.ExportType.values())
                                     .map(Enum::toString)
                                     .map(String::toLowerCase)
                                     .collect(joining(", "))));
