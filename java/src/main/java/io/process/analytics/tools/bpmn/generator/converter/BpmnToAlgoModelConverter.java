@@ -61,6 +61,8 @@ public class BpmnToAlgoModelConverter {
             isSplitGateway = ((TGateway) flowNode).getOutgoing().size() > 1;
         } else if (flowNode instanceof TEvent) {
             shapeType = EVENT;
+        } else if (flowNode instanceof TSubProcess) {
+            shapeType = SUB_PROCESS;
         }
         return new Shape(flowNode.getId(), flowNode.getName(), shapeType, isSplitGateway);
     }

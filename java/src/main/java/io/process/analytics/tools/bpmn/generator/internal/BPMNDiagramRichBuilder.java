@@ -15,16 +15,6 @@
  */
 package io.process.analytics.tools.bpmn.generator.internal;
 
-import static io.process.analytics.tools.bpmn.generator.internal.IdUtils.generateRandomId;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-
-import javax.xml.XMLConstants;
-import javax.xml.bind.JAXBElement;
-import javax.xml.namespace.QName;
-
 import io.process.analytics.tools.bpmn.generator.converter.AlgoToDisplayModelConverter.DisplayDimension;
 import io.process.analytics.tools.bpmn.generator.converter.AlgoToDisplayModelConverter.DisplayEdge;
 import io.process.analytics.tools.bpmn.generator.converter.AlgoToDisplayModelConverter.DisplayFlowNode;
@@ -33,6 +23,13 @@ import io.process.analytics.tools.bpmn.generator.internal.generated.model.*;
 import io.process.analytics.tools.bpmn.generator.model.ShapeType;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+
+import javax.xml.XMLConstants;
+import javax.xml.bind.JAXBElement;
+import javax.xml.namespace.QName;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * Helper to build a BPMNDiagram based on existing TDefinitions semantic part
@@ -76,6 +73,16 @@ public class BPMNDiagramRichBuilder {
             // For event adjust positions
             if(ShapeType.EVENT == shapeType) {
                 labelDimension = new DisplayDimension( flowNode.dimension.x, labelDimension.y, labelDimension.width, labelDimension.height);
+            }
+
+            // mark visible
+            if(ShapeType.GATEWAY == shapeType) {
+                bpmnShape.setIsMarkerVisible(true);
+            }
+
+            // set expand
+            if(ShapeType.SUB_PROCESS == shapeType) {
+                bpmnShape.setIsExpanded(true);
             }
 
             label.setBounds(bounds(labelDimension));
@@ -134,7 +141,7 @@ public class BPMNDiagramRichBuilder {
         diagrams.clear();
         BPMNDiagram bpmnDiagram = initializeBPMNDiagram();
         diagrams.add(bpmnDiagram);
-        
+
         BPMNPlane bpmnPlane = bpmnDiagram.getBPMNPlane();
         List<JAXBElement<? extends DiagramElement>> diagramElements = bpmnPlane.getDiagramElement();
 
